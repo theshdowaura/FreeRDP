@@ -26,9 +26,10 @@ jobs:
         cd C:\vcpkg
         ./bootstrap-vcpkg.bat
 
-    - name: Install Zlib
+    - name: Install Dependencies
       run: |
         C:\vcpkg\vcpkg.exe install zlib
+        C:\vcpkg\vcpkg.exe install ffmpeg  # 添加 FFmpeg 安装
         C:\vcpkg\vcpkg.exe integrate install
 
     - name: Configure with CMake
