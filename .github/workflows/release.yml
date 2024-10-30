@@ -1,0 +1,51 @@
+name: Build and Release FreeRDP
+
+on:
+  release:
+    types: [published]  # 当发布新版本时触发
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.21.3'  # 根据需要更改版本
+
+    - name: Install dependencies
+      run: |
+        choco install mingw
+        choco install cmake
+        choco install vcpkg
+
+    - name: Install Zlib
+      run: |
+        vcpkg install zlib
+        vcpkg integrate install
+
+    - name: Configure with CMake
+      run: |
+        mkdir build
+        cd build
+        cmake .. -G "Visual Studio 16 2019" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --config Release
+
+    - name: Upload Release Assets
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.event.release.tag_name }}  # 使用发布的版本号
+        files: build/bin/*  # 调整为你的输出文件路径
+        name: FreeRDP ${{ github.event.release.tag_name }}  # 自定义上传文件名
+        draft: false  # 如果希望自动发布，可以设置为 false
+        prerelease: false  # 如果是预发布版本，可以设置为 true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
