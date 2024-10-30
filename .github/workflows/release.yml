@@ -12,14 +12,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up CMake
-      uses: jwlawson/actions-setup-cmake@v1
-      with:
-        cmake-version: '3.21.3'  # 根据需要更改版本
-
     - name: Install MinGW
       run: |
-        choco install mingw --version=latest --yes
+        choco install mingw --yes
+
+    - name: Install CMake
+      run: |
+        choco install cmake --yes
 
     - name: Install vcpkg
       run: |
