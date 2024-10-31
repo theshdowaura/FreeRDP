@@ -29,7 +29,9 @@ jobs:
     - name: Install Dependencies
       run: |
         C:\vcpkg\vcpkg.exe install zlib
-        C:\vcpkg\vcpkg.exe install ffmpeg  # 添加 FFmpeg 安装
+        C:\vcpkg\vcpkg.exe install ffmpeg
+        C:\vcpkg\vcpkg.exe install cjson  # 添加 cJSON 安装
+        C:\vcpkg\vcpkg.exe install sdl2   # 添加 SDL2 安装
         C:\vcpkg\vcpkg.exe integrate install
 
     - name: Configure with CMake
